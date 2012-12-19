@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="iso-8859-1" ?>
+<project name="lab1" default="all" basedir=".">
+  
+  <property name="source.dir" location="src"/>
+  <property name="build.dir" location="bin"/>
+  <property name="doc.dir" location="doc"/>
+  <property name="dist.dir" value="dist"/>
+  <property name="reports.tests" value="relatorioDeTestes"/>
+  <property name="main.class" value="sistema.main"/>
+	
+  <!-- target clean - Clean the content into build, dist and doc folders -->
+  <target name="limpa" description="limpa o workspace">
+    <echo> Cleaning the project... </echo>
+    <delete dir="${build.dir}"/>
+    <delete dir="${doc.dir}"/>
+    <delete dir="${dist.dir}"/>
+  	<delete dir="${reports.tests}"/>
+    <delete>
+      <fileset defaultexcludes="no" dir="${source.dir}" includes="**/*~"/>
+    </delete>
+   <echo> Project cleaned. </echo>
+  </target>
+	
+  <!-- target init - Makes the directorys bin and doc -->
+  <target name="init" description="prepara os diretorios de compilacao">
+    <echo> Creating folders bin, dist and doc... </echo>
+    <mkdir dir="${build.dir}"/>
+    <mkdir dir="${doc.dir}"/>
+    <mkdir dir="${dist.dir}"/>
+    <echo> Folders created. </echo>
+  </target>
+	
+  <!-- target compila - Generate the .class and put them into build folder (bin)-->
+  <target name="compila" depends="init" description="compila o codigo java">
+    <echo> Compiling the project... </echo>
+  	<path id="junit">
+  		<fileset dir="C:\Users\Daniel Sepulveda\Downloads\eclipse\plugins\org.junit_4.10.0.v4_10_0_v20120426-0900" includes="*.jar"/>
+  	</path>	
+    <javac srcdir="${source.dir}" destdir="${build.dir}" 
+        includeantruntime="false" classpathref="junit"/>
+    <echo> Project compiled. </echo>
+  </target>
+	
+  <!-- target doc - Generate javadocs for current project into ${doc.dir} -->
+  <target name="doc" depends="init" description="gera documentacao">
+    <echo> Generating the javadoc </echo>
+    <javadoc sourcepath="${source.dir}" destdir="${doc.dir}"/>
+    <echo> Javadoc generated. </echo>
+  </target>
+	
+  <!-- target dist - Generate .jar int in folder dist. -->
+  <target name="dist" depends="compila">
+    <echo> Generating dist (.jar package)  ...</echo>    
+    <jar jarfile="${dist.dir}/lab1.jar" basedir="${build.dir}">
+<!-- Tornando o jar executavel-->
+    <manifest>
+     <attribute name="Main-Class" value="hello.HelloWorld"/>
+     </manifest>
+     </jar>
+   <echo> Dist generated with success. </echo>
+  </target>  
+	<!-- target run - Executes the current project -->
+  <target name="run" description="run the project" depends="compila">
+   <echo> Running the project... </echo>
+    <java dir="${build.dir}" classname="${main.class}" fork="yes">
+        <arg line="${args}"/>
+    </java>
+   <echo> Project executed with success. </echo>
+  </target>
+	
+	<!-- target testa - Testa o projeto -->
+	<target name="testa" depends="compila" >
+	 <mkdir dir="${reports.tests}"/>
+	    <junit printsummary="yes" haltonfailure="no">
+	    	<formatter type="xml"/>
+	      <classpath>
+	      	<pathelement location="C:\Users\Daniel Sepulveda\Downloads\eclipse\plugins\org.junit_4.10.0.v4_10_0_v20120426-0900/junit.jar"/>
+	        <pathelement location="${dist.dir}/${build.dir}"/>
+	        <pathelement path="${dist.dir}"/>
+	      </classpath>
+	      <batchtest fork="yes" todir="${reports.tests}">
+	        <fileset dir="${source.dir}/test">
+	          <include name="**/*Test*.java"/>
+	        </fileset>
+	      </batchtest>
+	    </junit>
+  </target>
+	<!-- target war - gera o war do projeto -->
+	<target name="war">
+	   <war destfile="${dist.dir}/lab1.war" >
+	   <fileset dir="WebContent">
+	      <include name="**/*.*"/>
+	   </fileset>
+	   <lib dir="WebContent/WEB-INF/lib">
+	      <exclude name="portlet.jar"/>
+	   </lib>
+	   <classes dir="${build.dir}"/>
+	</war>
+	</target>
+	
+  <!-- target all - Starts the ant build file execution -->
+  <target name="all" depends="limpa, dist">
+   <echo> Executing app... </echo>
+   <java jar="${dist.dir}/HelloAnt.jar" fork="true"/>
+   <echo> App executed. </echo>
+  </target>
+</project>
