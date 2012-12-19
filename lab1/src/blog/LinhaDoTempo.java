@@ -12,7 +12,9 @@ import org.hibernate.validator.cfg.defs.MaxDef;
 import tempo.IntervaloDeTempo;
 import tempo.UnidadeDeTempo;
 import exception.InvalidLinkException;
-
+/**
+ * Classe que representa uma linha do tempo de um {@link Usuario}
+ */
 public class LinhaDoTempo {
 
 	private ArrayList<Link> links;
@@ -23,6 +25,11 @@ public class LinhaDoTempo {
 		postagensDoSite = new HashMap<String, Integer>();
 	}
 
+	/**
+	 * Posta um link no blog
+	 * @param endereco o endereco do link
+	 * @throws InvalidLinkException exceção caso o link seja inválido
+	 */
 	public void posta(String endereco) throws InvalidLinkException{
 		if (endereco.startsWith("http://") ||
 				endereco.startsWith("https://")){
@@ -44,6 +51,10 @@ public class LinhaDoTempo {
 		return dominio;
 	}
 
+	/**
+	 * Retorna o o tempo medio entre as postagens do usuario
+	 * @return o {@link IntervaloDeTempo} medio entre as postagens do usuario
+	 */
 	public IntervaloDeTempo getTempoMedioEntrePostagens(){
 
 		if (links.size() < 2){
@@ -55,6 +66,7 @@ public class LinhaDoTempo {
 		}
 	}
 
+	
 	private IntervaloDeTempo calculaTempoMedio(Date dataPrimeiraPostagem,
 			Date dataUltimaPostagem) {
 		int numeroDePostagens = links.size() -1;
@@ -83,7 +95,10 @@ public class LinhaDoTempo {
 	public void posta(String endereco, int dia, int mes, int ano, int hora, int minuto) {
 		links.add(new Link(endereco, dia, mes, ano, hora, minuto));	
 	}
-
+	/**
+	 * Retorna o site mais postado pelo usuario atual
+	 * @return o site mais postado pelo usuario
+	 */
 	public String getSiteMaisPostado() {
 		String siteMaisPostado= "";
 		int maximoDePostagens = 0;
@@ -95,7 +110,10 @@ public class LinhaDoTempo {
 		}
 		return siteMaisPostado;
 	}
-
+	/**
+	 * Retorna uma lista contendo ate 10 dos links mais novos postados pelo usuario
+	 * @return uma {@link List} de {@link List}
+	 */
 	public List<Link> getUltimosLinksPostados(){
 		if(links.size() < 10){
 			return links.subList(0, links.size());

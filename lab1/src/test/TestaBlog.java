@@ -28,4 +28,22 @@ public class TestaBlog {
 			Assert.fail("O link e invalido");
 		}catch(InvalidLinkException e){}
 	}
+	@Test
+	public void testaSiteMaisLinkado() throws InvalidLinkException{
+		meuBlog.posta("https://google.com/blabalbalb");
+		Assert.assertEquals("google.com", meuBlog.getSiteMaisPostado());
+		
+		meuBlog.posta("https://youtube.com/comoAcharOSiteMaisPostadoEmJava");
+		meuBlog.posta("https://youtube.com/notFound");
+		Assert.assertEquals("youtube.com", meuBlog.getSiteMaisPostado());
+		
+		meuBlog.posta("https://tiny.url.com/notFound");
+		meuBlog.posta("https://tiny.url.com/yesFound");
+		meuBlog.posta("https://tiny.url.com/maybeFound");
+		Assert.assertEquals("tiny.url.com", meuBlog.getSiteMaisPostado());
+		
+		meuBlog.posta("https://www.youtube.com/yesFound");
+		meuBlog.posta("https://www.youtube.com/maybeFound");
+		Assert.assertEquals("youtube.com", meuBlog.getSiteMaisPostado());
+	}
 }

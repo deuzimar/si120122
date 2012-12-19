@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="iso-8859-1" ?>
 <project name="lab1" default="all" basedir=".">
   
+  <property name="proj.name" value="lab1"/>
   <property name="source.dir" location="src"/>
   <property name="build.dir" location="bin"/>
   <property name="doc.dir" location="doc"/>
   <property name="dist.dir" value="dist"/>
   <property name="reports.tests" value="relatorioDeTestes"/>
   <property name="main.class" value="sistema.main"/>
-	
-  <!-- target clean - Clean the content into build, dist and doc folders -->
+  
+  <!-- target limpa - limpa os diretorios criados no workspace-->
   <target name="limpa" description="limpa o workspace">
     <echo> Cleaning the project... </echo>
     <delete dir="${build.dir}"/>
@@ -21,7 +22,7 @@
    <echo> Project cleaned. </echo>
   </target>
 	
-  <!-- target init - Makes the directorys bin and doc -->
+  <!-- target init - cria os diretorios para compilacao e distribuicaoc -->
   <target name="init" description="prepara os diretorios de compilacao">
     <echo> Creating folders bin, dist and doc... </echo>
     <mkdir dir="${build.dir}"/>
@@ -30,7 +31,7 @@
     <echo> Folders created. </echo>
   </target>
 	
-  <!-- target compila - Generate the .class and put them into build folder (bin)-->
+  <!-- target compila -gera os .class e os coloca no diretorio (bin)-->
   <target name="compila" depends="init" description="compila o codigo java">
     <echo> Compiling the project... </echo>
   	<path id="junit">
@@ -41,20 +42,20 @@
     <echo> Project compiled. </echo>
   </target>
 	
-  <!-- target doc - Generate javadocs for current project into ${doc.dir} -->
+  <!-- target doc - gera o javadoc do projeto no diretorio ${doc.dir} -->
   <target name="doc" depends="init" description="gera documentacao">
     <echo> Generating the javadoc </echo>
     <javadoc sourcepath="${source.dir}" destdir="${doc.dir}"/>
     <echo> Javadoc generated. </echo>
   </target>
 	
-  <!-- target dist - Generate .jar int in folder dist. -->
+  <!-- target dist - gera o jar do projeto no diretorio ${build.dir}" -->
   <target name="dist" depends="compila">
     <echo> Generating dist (.jar package)  ...</echo>    
     <jar jarfile="${dist.dir}/lab1.jar" basedir="${build.dir}">
 <!-- Tornando o jar executavel-->
     <manifest>
-     <attribute name="Main-Class" value="hello.HelloWorld"/>
+     <attribute name="Main-Class" value="${main.class}"/>
      </manifest>
      </jar>
    <echo> Dist generated with success. </echo>
@@ -85,9 +86,9 @@
 	      </batchtest>
 	    </junit>
   </target>
-	<!-- target war - gera o war do projeto -->
+	<!-- target war - gera o war do projeto no diretorio ${dist.dir}-->
 	<target name="war">
-	   <war destfile="${dist.dir}/lab1.war" >
+	   <war destfile="${dist.dir}/${proj.name}.war" >
 	   <fileset dir="WebContent">
 	      <include name="**/*.*"/>
 	   </fileset>
@@ -99,7 +100,7 @@
 	</target>
 	
   <!-- target all - Starts the ant build file execution -->
-  <target name="all" depends="limpa, dist">
+  <target name="all" depends="limpa, dist, war">
    <echo> Executing app... </echo>
    <java jar="${dist.dir}/HelloAnt.jar" fork="true"/>
    <echo> App executed. </echo>

@@ -1,19 +1,30 @@
 package tempo;
-
+/**
+ *	Classe que representa um intervalo de tempo com unidade e valor
+ */
 public class IntervaloDeTempo {
-	
-	private double intervalo;
+	/**O valor do intervalo*/
+	private double valor;
+	/**Unidade de tempo do intervalo*/
 	private UnidadeDeTempo unidade;
-	
-	public IntervaloDeTempo(double intervalo, UnidadeDeTempo unidade){
-		this.intervalo = intervalo;
+	/**
+	 * Cria um intervalo de tempo a partir de um valor e de uma unidade
+	 * @param valor o valor do intervalo de tempo
+	 * @param unidade a {@link UnidadeDeTempo} do intervalo
+	 */
+	public IntervaloDeTempo(double valor, UnidadeDeTempo unidade){
+		this.valor = valor;
 		this.unidade = unidade;
 	}
-
-	public double getValue(){
-		return intervalo;
+	/**
+	 * Retorna o valor do intervalo 
+	 */
+	public double getValor(){
+		return valor;
 	}
-	
+	/**
+	 * Retorna a {@link UnidadeDeTempo} do intervalo
+	 */
 	public UnidadeDeTempo getUnidade(){
 		return unidade;
 	}
