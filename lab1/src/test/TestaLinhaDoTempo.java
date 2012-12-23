@@ -23,6 +23,7 @@ public class TestaLinhaDoTempo {
 		ldt.posta("http://google.com",21,9,2012,23,45);
 		ldt.posta("http://google.com",21,9,2012,23,50);
 		ldt.posta("http://google.com",21,9,2012,23,55);
+		
 		intervalo = ldt.getTempoMedioEntrePostagens();
 		Assert.assertEquals(intervalo.getValor(), 5f, 0.001);
 		Assert.assertEquals(UnidadeDeTempo.Minutos,intervalo.getUnidade());

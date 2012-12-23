@@ -84,7 +84,7 @@ public class LinhaDoTempo {
 	}
 
 	public void posta(String endereco, int dia, int mes, int ano, int hora, int minuto) {
-		links.add(new Link(endereco, dia, mes, ano, hora, minuto));	
+		links.add(0,new Link(endereco, dia, mes, ano, hora, minuto));	
 	}
 	/**
 	 * Retorna o site mais postado pelo usuario atual
