@@ -6,6 +6,7 @@
   <property name="build.dir" location="bin"/>
   <property name="doc.dir" location="doc"/>
   <property name="dist.dir" value="dist"/>
+  <property name="lib.dir" value="lib"/>
   <property name="reports.tests" value="relatorioDeTestes"/>
   <property name="main.class" value="sistema.main"/>
   
@@ -34,11 +35,11 @@
   <!-- target compila -gera os .class e os coloca no diretorio (bin)-->
   <target name="compila" depends="init" description="compila o codigo java">
     <echo> Compiling the project... </echo>
-  	<path id="junit">
-  		<fileset dir="C:\Users\Daniel Sepulveda\Downloads\eclipse\plugins\org.junit_4.10.0.v4_10_0_v20120426-0900" includes="*.jar"/>
+  	<path id="lib">
+  		<fileset dir="${lib.dir}" includes="*.jar"/>
   	</path>	
     <javac srcdir="${source.dir}" destdir="${build.dir}" 
-        includeantruntime="false" classpathref="junit"/>
+        includeantruntime="false" classpathref="lib"/>
     <echo> Project compiled. </echo>
   </target>
 	
@@ -75,14 +76,12 @@
 	    <junit printsummary="yes" haltonfailure="no">
 	    	<formatter type="xml"/>
 	      <classpath>
-	      	<pathelement location="C:\Users\Daniel Sepulveda\Downloads\eclipse\plugins\org.junit_4.10.0.v4_10_0_v20120426-0900/junit.jar"/>
-	        <pathelement location="${dist.dir}/${build.dir}"/>
-	        <pathelement path="${dist.dir}"/>
+	      	<fileset dir="${lib.dir}" includes="*.jar" />
+	        <pathelement location="${build.dir}"/>
+	      	<pathelement location="${source.dir}"/>
 	      </classpath>
 	      <batchtest fork="yes" todir="${reports.tests}">
-	        <fileset dir="${source.dir}/test">
-	          <include name="**/*Test*.java"/>
-	        </fileset>
+	      	<fileset dir="${build.dir}" includes="**/*Test*.class"/>
 	      </batchtest>
 	    </junit>
   </target>

@@ -1,5 +1,7 @@
 package blog;
 
+import java.util.List;
+
 import tempo.IntervaloDeTempo;
 import exception.InvalidLinkException;
 /**
@@ -8,6 +10,11 @@ import exception.InvalidLinkException;
 public class Blog {
 	/**O Usuario atual do blog*/
 	private Usuario usuarioAtual;
+	
+	public Blog(){
+		usuarioAtual = new Usuario("Padrao");
+	}
+	
 	/**
 	 * Posta um link no blog
 	 * @param endereco o endereco do {@link Link}
@@ -28,7 +35,7 @@ public class Blog {
 	 * Cria um novo {@link Usuario} do blog e o seta como usuário atual
 	 * @param nome o nome do usuário
 	 */
-	public void novoUsuario(String nome) {
+	public void atualizaUsuario(String nome) {
 		usuarioAtual = new Usuario(nome);
 	}
 	/**
@@ -44,6 +51,10 @@ public class Blog {
 	 */
 	public IntervaloDeTempo getTempoMedioEntrePostagens(){
 		return usuarioAtual.getTempoMedioEntrePostagens();
+	}
+	
+	public List<Link> getUltimosLinksPostados(){
+		return usuarioAtual.getUltimosLinksPostados();
 	}
 
 }

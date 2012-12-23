@@ -9,7 +9,7 @@ public class TestaBlog {
 	@Before
 	public void setUp(){
 		meuBlog = new Blog();
-		meuBlog.novoUsuario("Tester");
+		meuBlog.atualizaUsuario("Tester");
 	}
 	@Test
 	public void testaCriacaoDeLink(){

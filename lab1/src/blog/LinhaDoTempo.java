@@ -1,14 +1,11 @@
 package blog;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-
-import org.hibernate.validator.cfg.defs.MaxDef;
-
 import tempo.IntervaloDeTempo;
 import tempo.UnidadeDeTempo;
 import exception.InvalidLinkException;
@@ -31,16 +28,10 @@ public class LinhaDoTempo {
 	 * @throws InvalidLinkException exceção caso o link seja inválido
 	 */
 	public void posta(String endereco) throws InvalidLinkException{
-		if (endereco.startsWith("http://") ||
-				endereco.startsWith("https://")){
-			links.add(new Link(endereco));
+			links.add(0,new Link(endereco));
 			String dominio = getDominioDoSite(endereco);
 			postagensDoSite.put(dominio,
-					postagensDoSite.get(dominio)!= null? postagensDoSite.get(dominio) + 1: 1);
-		}else{
-			throw new InvalidLinkException("Link Inválido.");
-		}
-
+			postagensDoSite.get(dominio)!= null? postagensDoSite.get(dominio) + 1: 1);
 	}
 
 	private String getDominioDoSite(String endereco) {
@@ -57,21 +48,21 @@ public class LinhaDoTempo {
 	 */
 	public IntervaloDeTempo getTempoMedioEntrePostagens(){
 
-		if (links.size() < 2){
+		if (links.size() < 1){
 			return null;
 		}else{
-			Date dataPrimeiraPostagem = links.get(0).getDataDePostagem();
-			Date dataUltimaPostagem = links.get(links.size()-1).getDataDePostagem();
+			Calendar dataUltimaPostagem = links.get(0).getDataDePostagem();
+			Calendar dataPrimeiraPostagem= links.get(links.size()-1).getDataDePostagem();
 			return calculaTempoMedio(dataPrimeiraPostagem,dataUltimaPostagem);
 		}
 	}
 
 	
-	private IntervaloDeTempo calculaTempoMedio(Date dataPrimeiraPostagem,
-			Date dataUltimaPostagem) {
+	private IntervaloDeTempo calculaTempoMedio(Calendar dataPrimeiraPostagem,
+			Calendar dataUltimaPostagem) {
 		int numeroDePostagens = links.size() -1;
 		double milisegundosPorDia = 1000*60*60*24;
-		double tempoEntreDatasMiliSec = dataUltimaPostagem.getTime() - dataPrimeiraPostagem.getTime();
+		double tempoEntreDatasMiliSec = dataUltimaPostagem.getTimeInMillis() - dataPrimeiraPostagem.getTimeInMillis();
 		double tempoMedioEntrePostagens = tempoEntreDatasMiliSec/(milisegundosPorDia*numeroDePostagens);
 		if(tempoMedioEntrePostagens >= 1f){
 			return new IntervaloDeTempo(tempoMedioEntrePostagens,UnidadeDeTempo.Dias);

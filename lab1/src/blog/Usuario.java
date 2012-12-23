@@ -1,5 +1,7 @@
 package blog;
 
+import java.util.List;
+
 import tempo.IntervaloDeTempo;
 import exception.InvalidLinkException;
 /**
@@ -49,6 +51,10 @@ public class Usuario {
 	 */
 	public IntervaloDeTempo getTempoMedioEntrePostagens() {
 		return linhaDoTempo.getTempoMedioEntrePostagens();
+	}
+	
+	public List<Link> getUltimosLinksPostados(){
+		return linhaDoTempo.getUltimosLinksPostados();
 	}
 
 }
