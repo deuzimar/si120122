@@ -3,10 +3,6 @@ package sistema;
 import java.util.Arrays;
 import java.util.List;
 
-import org.picketbox.util.StringUtil;
-
-import com.ibm.wsdl.util.StringUtils;
-
 public class Texto {
 	List<String> palavras;
 	int NUM_PALAVRAS_INTRODUCAO = 12;

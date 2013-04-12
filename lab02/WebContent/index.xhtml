@@ -21,15 +21,11 @@
 
 		<p:panel header="Escolha sua tarefa">
 			<div align="center">
+				<p:graphicImage value="logo.png" />
 				<h:panelGrid columns="2">
-
 					<p:commandButton value="Recombinar Texto"
-						action="#{Recombinador.verificaTextos}" update="msg" ajax="false"/>
-
-
-					<p:button value="Novo Texto"
-						outcome="paginaDeAdicaoDeTexto.xhtml"/>
-
+						action="#{Recombinador.verificaTextos}" update="msg" ajax="false" />
+					<p:button value="Novo Texto" outcome="paginaDeAdicaoDeTexto.xhtml" />
 				</h:panelGrid>
 			</div>
 		</p:panel>

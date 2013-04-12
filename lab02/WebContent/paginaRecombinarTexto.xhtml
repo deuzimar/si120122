@@ -21,7 +21,7 @@
 
 				
 
-				<p:commandButton value="Adiciona linha" action="#{Recombinador.adicionaLinha}" update="textoAtual,Adiciona linha" disabled="#{Recombinador.temMaisLinhas}" ajax="false" />
+				<p:commandButton value="Adiciona linha" action="#{Recombinador.adicionaLinha}" update="textoAtual,Adiciona linha" disabled="#{!(Recombinador.temMaisLinhas)}" ajax="false" />
 
 			</h:panelGrid>
 

@@ -47,6 +47,7 @@ public class Sistema {
 	}
 	
 	public List<Texto> getTextos(){
+		
 		return textos;
 	}
 	

@@ -1,5 +1,8 @@
 package beans;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,6 +11,9 @@ import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
+
+import org.primefaces.model.DefaultStreamedContent;
+import org.primefaces.model.StreamedContent;
 
 import exception.NaoHaMaisLinhasException;
 import exception.RecombinadorInexistente;
@@ -22,11 +28,18 @@ public class RecombinadorBean {
 	private Texto textoSelecionado;
 	private String recombinadorAtual;
 	private Sistema sistema;
+	private StreamedContent logo;
 
 	@PostConstruct
 	public void init(){
 		this.sistema = Sistema.getInstance();
 		textoAtual = "";
+	}
+	
+	public StreamedContent getLogo() throws FileNotFoundException{
+		System.out.println(new File("logo.png").getAbsolutePath());
+        logo = new DefaultStreamedContent(new FileInputStream(new File("logo.png")));  
+		return logo;
 	}
 	
 	
@@ -40,6 +53,7 @@ public class RecombinadorBean {
 	}
 
 	public List<Texto> getTextos() {
+		textoSelecionado = sistema.getTextos().get(0);
 		return sistema.getTextos();
 	}
 
@@ -76,6 +90,8 @@ public class RecombinadorBean {
 	public String adicionaTexto(){
 		sistema.novoTexto(textoAtual);
 		textoAtual = "";
+		FacesContext context = FacesContext.getCurrentInstance();  
+		context.addMessage(null, new FacesMessage("Texto salvo com sucesso")); 
 		return "index.xhtml";
 	}
 	

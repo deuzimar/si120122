@@ -41,7 +41,7 @@ public class RecombinadorAleatorioSemRepeticao implements RecombinadorDeTexto {
 
 	@Override
 	public boolean haMaisLinhas() {
-		return linhasRestantes == 0;
+		return linhasRestantes != 0;
 	}
 
 }

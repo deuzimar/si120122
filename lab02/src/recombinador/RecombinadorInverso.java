@@ -5,7 +5,7 @@ import sistema.Texto;
 
 public class RecombinadorInverso implements RecombinadorDeTexto {
 	Texto texto;
-	int linhaAtual = Integer.MIN_VALUE;
+	int linhaAtual;
 	@Override
 	public String getLinha() throws NaoHaMaisLinhasException {
 		if(linhaAtual == Integer.MIN_VALUE){
@@ -19,11 +19,12 @@ public class RecombinadorInverso implements RecombinadorDeTexto {
 	@Override
 	public void setTexto(Texto texto) {
 		this.texto = texto;
+		this.linhaAtual  = Integer.MIN_VALUE;
 	}
 
 	@Override
 	public boolean haMaisLinhas() {
-		return linhaAtual == -1;
+		return linhaAtual != -1;
 	}
 
 }
