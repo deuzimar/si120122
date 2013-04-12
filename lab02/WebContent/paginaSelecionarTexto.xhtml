@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core">
+
+<h:head>
+	<title><ui:insert name="title">Selecionar texto para recombinar</ui:insert></title>
+
+</h:head>
+
+<h:body>
+
+
+	<h:form>
+		<p:growl id="msg" showDetail="true" sticky="true" />
+		<p:panel header="Selecione um texto e um tipo de recombinação"
+			style="width:100%,height">
+			<h:panelGrid style="width:100%">
+				<p:column colspan="3">
+					<p:panel header="Modos de Recombinação" style="width:100%">
+
+						<p:selectOneListbox value="#{Recombinador.recombinadorAtual}"
+							id="recombinadores" style="width:100%">
+							<f:selectItems value="#{Recombinador.recombinadores}"
+								var="recombinadorSelecionado"
+								itemValue="#{recombinadorSelecionado}" />
+						</p:selectOneListbox>
+
+					</p:panel>
+				</p:column>
+				<p:column colspan="7">
+					<p:panel header="Textos cadastrados" style="width:100%">
+						<p:selectOneListbox id="textosCadastrados"
+							value="#{Recombinador.textoSelecionado}"
+							converter="textoConverter" var="t" style="width:100%">
+							<f:selectItems value="#{Recombinador.textos}" var="texto"
+								itemValue="#{texto}" itemLabel="#{texto.introducaoDoTexto}" />
+						</p:selectOneListbox>
+
+					</p:panel>
+
+				</p:column>
+
+			</h:panelGrid>
+			<div align="right">
+				<p:commandButton value="Voltar" action="#{Recombinador.voltar}"
+					ajax="false" />
+
+				<p:commandButton value="Recombinar"
+					action="#{Recombinador.preparaRecombinacao}" ajax="false"
+					update="msg" />
+			</div>
+		</p:panel>
+	</h:form>
+
+</h:body>
+</html>
