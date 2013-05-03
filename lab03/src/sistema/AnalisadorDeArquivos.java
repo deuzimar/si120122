@@ -11,28 +11,30 @@ import java.util.Map;
 import util.FileUtil;
 import util.PalavrasReservadasJava;
 
-public class AnalisadorDeArquivos implements ObservadorAnaliseDeArquivo {
+public class AnalisadorDeArquivos implements ObservadorDeThreadDeArquivo {
 	private List<File> arquivos;
 	List<ThreadAnalisadoraDeArquivo> threads;
 	private Iterator<File> fileIterator;
 	private Map<String, Integer> contagem;
-	int arquivosProcessados;
 	int tempoDeExecucao;
+	private ObservadorDeAnaliseDeArquivo observer;
 
 	public AnalisadorDeArquivos() {
 		this.arquivos = new ArrayList<File>();
 		this.threads = new ArrayList<ThreadAnalisadoraDeArquivo>();
 		this.contagem = new HashMap<String, Integer>();
-		this.arquivosProcessados = 0;
 		this.tempoDeExecucao = 0;
 		iniciaContagem();
 	}
 	
-	public long processaArquivos(String dir,int maxThreads){
-		long tempoInicial = System.currentTimeMillis();
+	public void setObserver(ObservadorDeAnaliseDeArquivo observer) {
+		this.observer = observer;
+	}
+	
+	public void processaArquivos(String dir,int maxThreads){
+		iniciaContagem();
 		preparaArquivos(dir);
 		iniciaThreads(maxThreads);
-		return System.currentTimeMillis() - tempoInicial;	
 	}
 	
 	private void iniciaContagem() {
@@ -42,24 +44,22 @@ public class AnalisadorDeArquivos implements ObservadorAnaliseDeArquivo {
 	}
 
 	public void preparaArquivos(String dir) {
+		arquivos.clear();
 		FileUtil.fillAllFilesList(arquivos, new File(dir));
 		fileIterator = arquivos.iterator();
+		if(observer != null){
+			observer.arquivosEncontrados(arquivos.size());
+		}
 	}
 
 	public void iniciaThreads(int numMaxThreads) {
 		if(numMaxThreads == 0){
-			numMaxThreads = arquivos.size();
+			numMaxThreads = 5;
 		}
-		for (int i = numMaxThreads; i > 0 && fileIterator.hasNext(); i--) {
+		for (int i = numMaxThreads; i > 0 ; i--) {
 			ThreadAnalisadoraDeArquivo thread = new ThreadAnalisadoraDeArquivo(this);
 			threads.add(thread);
 			thread.start();	
-		}
-		for(Thread t : threads){
-			try {
-				t.join();
-			} catch (InterruptedException e) {
-			}
 		}
 	}
 
@@ -73,12 +73,18 @@ public class AnalisadorDeArquivos implements ObservadorAnaliseDeArquivo {
 		}
 
 	}
+	
+	public Map<String, Integer> getContagem(){
+		return contagem;
+	}
 
 	@Override
 	public synchronized void arquivoAnalizado(Map<String, Integer> contagemNoArquivo) {
 		for(String palavra: contagemNoArquivo.keySet()){
 			contagem.put(palavra, contagem.get(palavra) + contagemNoArquivo.get(palavra));
 		}
-		arquivosProcessados += 1;
+		if(observer != null){
+			observer.arquivoAnalisado();
+		}
 	}
 }

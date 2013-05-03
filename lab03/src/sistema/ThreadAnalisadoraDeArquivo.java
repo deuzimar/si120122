@@ -17,12 +17,12 @@ import util.PalavrasReservadasJava;
 
 public class ThreadAnalisadoraDeArquivo extends Thread {
 
-	private ObservadorAnaliseDeArquivo observer;
+	private ObservadorDeThreadDeArquivo observer;
 	private File file;
 	private Map<String, Integer> contagem;
 	private List<String> reservadas;
 
-	public ThreadAnalisadoraDeArquivo(ObservadorAnaliseDeArquivo obs) {
+	public ThreadAnalisadoraDeArquivo(ObservadorDeThreadDeArquivo obs) {
 		this.observer = obs;
 		this.reservadas = Arrays.asList(PalavrasReservadasJava.getPalavras());
 		this.contagem = new HashMap<String, Integer>();
