@@ -1,5 +1,22 @@
 package sistema;
-quebra
+
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
+import util.FileUtil;
+import util.PalavrasReservadasJava;
+
+public class AnalisadorDeArquivos implements ObservadorDeThreadDeArquivo {
+	private List<File> arquivos;
+	List<ThreadAnalisadoraDeArquivo> threads;
+	private Iterator<File> fileIterator;
+	private Map<String, Integer> contagem;
+	int tempoDeExecucao;
 	private ObservadorDeAnaliseDeArquivo observer;
 
 	public AnalisadorDeArquivos() {
