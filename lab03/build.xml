@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="iso-8859-1" ?>
+<project name="lab1" default="all" basedir=".">
+  <!-- Define as propriedades do projeto -->
+  <property name="proj.name" value="lab01Gabarito"/>  <!-- Nome do Projeto-->
+  <property name="source.dir" value="src"/>   <!--Diretorio raiz de onde estao os arquivos .java, por padrao o diretorio src -->
+  <property name="test.dir" value="test"/>   <!--Diretorio raiz de onde estao os arquivos .java das classe de teste, por padrao o diretorio test -->
+  <property name="build.dir" value="bin"/>  <!--Diretorio diretorio onde serao colocados os .class resultantes da compilacao-->
+  <property name="dist.dir" value="dist"/> <!-- Diretorio de onde sera gerado o arquivo executavel do projeto-->
+  <property name="lib.dir" value="lib"/>     <!--Diretorio diretorio onde estao incluidas as bibliotecas necessarioas ao projeto -->
+  <property name="reports.tests" value="Relatorio"/> <!-- Diretorio onde seroa gerados os relatorios dos testes -->
+  <property name="main.class" value="Main.class"/> <!-- Classe principal do projeto, que sera chamada no executavel-->
+  
+  <!-- target limpa - limpa os diretorios criados no workspace-->
+  <target name="limpa" description="limpa o workspace">
+    <echo> Limpando projeto... </echo>
+    <delete dir="${build.dir}"/>
+    <delete dir="${dist.dir}"/>
+  	<delete dir="${reports.tests}"/>
+    <delete>
+      <fileset defaultexcludes="no" dir="${source.dir}" includes="**/*~"/>
+    </delete>
+   <echo> Projeto limpo. </echo>
+  </target>
+	
+  <!-- target init - cria os diretorios para compilacao e distribuicao -->
+  <target name="init" description="prepara os diretorios de compilacao">
+    <echo> Criando as pastas </echo>
+    <mkdir dir="${build.dir}"/>
+    <mkdir dir="${dist.dir}"/>
+  	<mkdir dir="${reports.tests}"/>
+    <echo> Pastas criadas. </echo>
+  </target>
+	
+  <!-- target compila -gera os .class e os coloca no diretorio (bin)-->
+  <target name="compila" depends="init" description="compila o codigo java">
+    <echo> Compilando o projeto... </echo>
+  	<!-- Nessa tag (path)  sao referenciados todos as bibliotecas necessarias ao projeto, caso haja bibliotecas fora da pasta lib,
+  	apenas eh necessario adicionar outro(s) fileset(s) na tag	-->
+  	<path id="lib">
+  		<fileset dir="${lib.dir}" includes="*.jar"/>
+  	</path>	
+  	<!--Task que chama o compilador java, ela referencia nosso classpath(id lib no caso) e inclui, a partir do diretorio raiz do projeto
+  	todos os .java a partir do diretorio source.dir (definido nas propriedades) e todos os arquivos .java que incluem Test no nome a partir
+  	do diretorio test.dir, tambem definido nas propriedades -->
+  	<javac sourcepath="" srcdir="." includeantruntime="false" classpathref="lib"
+  	         destdir="${build.dir}" >
+  	    <include name="${source.dir}/**/*.java"/>
+  	    <include name="${test.dir}/**/*Test*.java"/>
+  	  </javac>
+    <echo> Projeto compilado. </echo>
+  </target>
+    	
+	<!-- target executa - Executa o projeto -->
+  <target name="executa" description="executa o projeto" depends="compila">
+   <echo> Executando projeto ... </echo>
+    <java dir="${build.dir}" classname="${main.class}" fork="yes">
+        <arg line="${args}"/>
+    </java>
+   <echo> Projeto executado. </echo>
+  </target>
+	
+	<!-- target testa - Testa o projeto -->
+	<target name="testa" depends="compila" >
+	    <junit printsummary="yes" haltonfailure="no">
+	    	<formatter type="xml"/>
+	    	<!-- Indica o caminho dos arquivos .class (incluindo as bibliotecas)-->
+	      <classpath>
+	      	<fileset dir="${lib.dir}" includes="*.jar" />
+	        <pathelement location="${build.dir}"/>
+	      </classpath>
+	      <!-- Executa todos os arquivos no formato **/*Test*.class , ou seja, todos os .class com Test no nome-->
+	      <batchtest fork="yes" todir="${reports.tests}">
+	      	<fileset dir="${build.dir}" includes="**/*Test*.class"/>
+	      </batchtest>
+	    </junit>
+  </target>
+	
+	<!-- target dist - gera o jar do projeto no diretorio ${build.dir}" -->
+	  <target name="dist" depends="compila">
+	    <echo> Generating dist (.jar package)  ...</echo>    
+	    <jar jarfile="${dist.dir}/lab1.jar" basedir="${build.dir}">
+	<!-- Tornando o jar executavel-->
+	    <manifest>
+	     <attribute name="Main-Class" value="${main.class}"/>
+	     </manifest>
+	     </jar>
+	   <echo> Dist generated with success. </echo>
+	  </target>
+	
+  <!-- target all - Starts the ant build file execution -->
+  <target name="all" depends="limpa, executa">
+   <echo> Executing app... </echo>
+   <java jar="${dist.dir}/HelloAnt.jar" fork="true"/>
+   <echo> App executed. </echo>
+  </target>
+</project>
